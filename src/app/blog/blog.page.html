@@ -1,0 +1,528 @@
+<ion-header>
+  <ion-toolbar color="light">
+    <ion-button color="light" class="backBtn" routerLink="/home" slot="start">
+      Back <ion-icon name="arrow-undo-circle-outline"></ion-icon>
+    </ion-button>
+    <ion-title color="dark">Projects</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="projCont">
+    <h1>
+      <ion-label color="dark"
+        >A <ion-label color="warning">sensible</ion-label>
+        <ion-label color="secondary"> Webpack</ion-label> setup using
+        <ion-label color="success"> Node.js</ion-label>
+      </ion-label>
+    </h1>
+    <h5>
+      <br />
+      <br />
+      step 1.) Lets create some files
+      <br />
+      <br />
+      <img src="../../assets/images/2.png" />
+      <br />
+      <br />
+      Step 2.) Move the index.html, script.js, and styles.css into the
+      <i>src</i>
+      directory we have just created.
+      <br />
+      <br />
+      <img src="../../assets/images/1.png" />
+      <br />
+      <br />
+      Step 4.) in your terminal run
+      <br />
+      <br />
+      <ion-label color="primary">npm init -y</ion-label>
+
+      <br />
+      <br />
+      Step 5.) next lets generate our
+      <ion-label color="success">node_modules</ion-label> by installing some
+      dependencies necessary for our
+      <ion-label color="secondary">webpack</ion-label> bundling.
+      <br />
+      <br />
+      - Some of these dependencies include babel( js compiler), port finder,
+      webpack file loading dependencies, a web pack dev server and more. This
+      tutorial will not go over them individually, however I suggest you search
+      them and read up a bit on what they are doing as it is interesting and
+      will help you understand how webpack works a bit better.
+      <br />
+      - Here is the list of dependencies, you may
+
+      <ion-label color="danger"
+        >copy and paste into your package.json file</ion-label
+      >
+      in the dependencies section. once you have copied them, simply run npm i ,
+      and all the inserted dependencies will install in one go.
+      <br />
+      <br />
+
+      <ion-label>
+        <textarea class="codeSnips1">
+        "dependencies": { "@babel/core": "^7.12.10", "@babel/preset-env":
+        "^7.12.11", "babel-loader": "^8.2.2", "clean-webpack-plugin": "^3.0.0",
+        "copy-webpack-plugin": "^7.0.0", "css-loader": "^5.0.1", "file-loader":
+        "^6.2.0", "html-loader": "^1.3.2", "html-webpack-plugin":
+        "^5.0.0-alpha.7", "mini-css-extract-plugin": "^1.3.5",
+        "portfinder-sync": "0.0.2", "raw-loader": "^4.0.2", "style-loader":
+        "^2.0.0", "webpack": "^5.18.0", "webpack-cli": "^4.4.0",
+        "webpack-dev-server": "^3.11.2", "webpack-merge": "^5.7.3" }
+      </textarea
+        >
+      </ion-label>
+      <br />
+      <br />
+      <ion-label color="primary">
+        npm install
+      </ion-label>
+
+      <br />
+      <br />
+      Step. 6.) lets create our
+      <ion-label color="secondary">webpack</ion-label> files.
+      <br />
+      <br />
+      <img src="../../assets/images/3.png" />
+
+      <br />
+      <br />
+      Step 7.) move them into the <i>bundler </i>folder. Your folders should
+      look identical to this now.
+      <br />
+      <br />
+      <img src="../../assets/images/4.png" />
+      <br />
+      <br />
+      Step 8.) Lets start with our
+      <ion-label color="secondary">webpack.dev.js</ion-label> File. This file is
+      responsible for merging our webpack configurations(that we will later
+      create) and grabbing our ip, using port finder sync to serve our project
+      locally on the webpack-dev-server. Copy and paste the blue code below into
+      your webpack.dev.js
+      <br />
+      <br />
+      <ion-label>
+        <textarea class="codeSnips2">
+ 
+            const { merge } = require('webpack-merge')
+            const commonConfiguration = require('./webpack.common.js')
+            const ip = require('internal-ip')
+            const portFinderSync = require('portfinder-sync')
+            
+            const infoColor = (_message) =>
+            {
+                return `\u001b[1m\u001b[34m${_message}\u001b[39m\u001b[22m`
+            }
+            
+            module.exports = merge(
+                commonConfiguration,
+                {
+                    mode: 'development',
+                    devServer:
+                    {
+                        host: '0.0.0.0',
+                        port: portFinderSync.getPort(8080),
+                        contentBase: './dist',
+                        watchContentBase: true,
+                        open: true,
+                        https: false,
+                        useLocalIp: true,
+                        disableHostCheck: true,
+                        overlay: true,
+                        noInfo: true,
+                        after: function(app, server, compiler)
+                        {
+                            const port = server.options.port
+                            const https = server.options.https ? 's' : ''
+                            const localIp = ip.v4.sync()
+                            const domain1 = `http${https}://${localIp}:${port}`
+                            const domain2 = `http${https}://localhost:${port}`
+                            
+                            console.log(`Project running at:\n  - ${infoColor(domain1)}\n  - ${infoColor(domain2)}`)
+                        }
+                    }
+                }
+            )
+            
+        </textarea>
+      </ion-label>
+
+      <br />
+      <br />
+      Step 9.) Lets open the
+      <ion-label color="secondary">webpack.prod.js</ion-label>. Much like the
+      dev.js file, this is also responsible for merging our configurations
+      (still not created) , and initiates production mode by remove all files
+      inside webpack's output.path directory, as well as all unused webpack
+      assets after every successful rebuild. The clean-webpack-plugin is
+      responsible for removing your build folder before building.
+      <br />
+      <br />
+      -Copy and paste the code into the
+      <ion-label color="secondary">webpack.prod.js</ion-label>
+      <br />
+      <br />
+      <ion-label>
+        <textarea class="codeSnips3">
+            const { merge } = require('webpack-merge')
+            const commonConfiguration = require('./webpack.common.js')
+            const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+            
+            module.exports = merge(
+                commonConfiguration,
+                {
+                    mode: 'production',
+                    plugins:
+                    [
+                        new CleanWebpackPlugin()
+                    ]
+                }
+            )
+             </textarea
+        >
+      </ion-label>
+
+      <br />
+      <br />
+      Step 10.) Lets make our webpack configuration! This is done in the
+      <ion-label color="secondary">webpack.common.js</ion-label>. So go ahead
+      and open it up. This file is responsible for a lot, ill try to break it
+      down briefly. In order to
+      <br />
+      <br />
+
+      -Using path, we can first specify and entry point for this new module we
+      want to create and bundle. Additionally, we need to specify our output
+      options, as well as our plugins. as you see in our output.path =
+      path.resolve(__dirname, “../dist/) we are saying hey we want this new
+      bundled module to be in a folder called dist and we want it in the root of
+      our project folder.
+      <br />
+      <br />
+      <ion-label>
+        <textarea class="codeSnips4">
+module.exports = {
+
+            entry: path.resolve(__dirname, '../src/script.js'),
+               output:
+               {
+                   filename: 'bundle.[contenthash].js',
+                   path: path.resolve(__dirname, '../dist')
+               },
+               devtool: ‘source-map’,
+               plugins: {}
+           }
+            </textarea
+        >
+      </ion-label>
+      <br />
+      <br />
+      Our plugins will help load our files from our src folder, it will search
+      inside to the spot that we point to and in our testing options we can
+      specify in js what file types we would like to search for. If it finds the
+      respective file type, ( in our case its .html, .js, .css, as well as
+      assets such as .jpg, .png and so on), it include them in the bundle.
+      <br />
+      <br />
+
+      Htmlwebpackplugin and copywebpackplugin both take one object as a
+      parameter to define where in our project to search.
+      <br />
+      <br />
+
+      Please ensure your entire
+      <ion-label color="secondary">webpack.common.js</ion-label> is identical to
+      the code below.
+      <br />
+      <br />
+      <ion-label>
+        <textarea class="codeSnips5">
+ 
+            const CopyWebpackPlugin = require('copy-webpack-plugin')
+            const HtmlWebpackPlugin = require('html-webpack-plugin')
+            const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
+            const path = require('path')
+            
+            module.exports = {
+                entry: path.resolve(__dirname, '../src/script.js'),
+                output:
+                {
+                    filename: 'bundle.[contenthash].js',
+                    path: path.resolve(__dirname, '../dist')
+                },
+                devtool: 'source-map',
+                plugins:
+                [
+                    new CopyWebpackPlugin({
+                        patterns: [
+                            { from: path.resolve(__dirname, '../static') }
+                        ]
+                    }),
+                    new HtmlWebpackPlugin({
+                        template: path.resolve(__dirname, '../src/index.html'),
+                        minify: true
+                    }),
+                    new MiniCSSExtractPlugin()
+                ],
+                module:
+                {
+                    rules:
+                    [
+                        // HTML
+                        {
+                            test: /\.(html)$/,
+                            use: ['html-loader']
+                        },
+            
+                        // JS
+                        {
+                            test: /\.js$/,
+                            exclude: /node_modules/,
+                            use:
+                            [
+                                'babel-loader'
+                            ]
+                        },
+            
+                        // CSS
+                        {
+                            test: /\.css$/,
+                            use:
+                            [
+                                MiniCSSExtractPlugin.loader,
+                                'css-loader'
+                            ]
+                        },
+            
+                        // Images
+                        {
+                            test: /\.(jpg|png|gif|svg)$/,
+                            use:
+                            [
+                                {
+                                    loader: 'file-loader',
+                                    options:
+                                    {
+                                        outputPath: 'assets/images/'
+                                    }
+                                }
+                            ]
+                        },
+            
+                        // Fonts
+                        {
+                            test: /\.(ttf|eot|woff|woff2)$/,
+                            use:
+                            [
+                                {
+                                    loader: 'file-loader',
+                                    options:
+                                    {
+                                        outputPath: 'assets/fonts/'
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+            
+        </textarea>
+      </ion-label>
+      <br />
+      <br />
+      Step 11.) Add something to your
+      <ion-label color="danger">index.html</ion-label> to test. ** imprortant**
+      no need to link js or css files into your index, webpack config will
+      handle this. However, we do need to import our css into our js file like
+      so.
+      <br />
+      <br />
+      <img src="../../assets/images/5.png" />
+      <br />
+      <br />
+      <img src="../../assets/images/6.png" />
+      <br />
+      <br />
+      Step 12.) To run locally, we need to use the webpack dev server. Lets open
+      <ion-label color="success">package.json</ion-label>
+      and write some scripts. The dev script will run our run our webpack dev
+      server with our configurations defined in our
+      <i><ion-label color="secondary">webpack.dev.js</ion-label></i
+      >. Also, when we are ready to build, we can do run our build script.
+      Finally, this will <ion-label color="danger">bundle</ion-label> our files
+      with our configurations defined in our
+      <i><ion-label color="secondary">webpack.prod.js</ion-label></i
+      >.
+
+      <br />
+      <br />
+      <ion-label>
+        <textarea class="codeSnips6">
+ 
+            "scripts": {
+              "build": "webpack --config ./bundler/webpack.prod.js",
+              "dev": "webpack serve --config ./bundler/webpack.dev.js"
+            },
+        </textarea>
+      </ion-label>
+      <br />
+      <br />
+      <img src="../../assets/images/7.png" />
+      <br />
+      <br />
+      Step.13) To run our dev script for local development, simply open a new
+      terminal and type in
+      <br />
+      <br />
+      <ion-label color="primary">npm run dev</ion-label>
+      <br />
+      <br />
+      Step 14.) Now, if you look we have a compiling error. Something about it
+      wanting something to be in there to look for maybe?? idk why, but if you
+      add a <ion-label color="danger">.gitkeep </ion-label>file into your static
+      folder it will be all set to go.
+      <br />
+      <br />
+      <img src="../../assets/images/8.png" />
+      <br />
+      <br />
+      You should now see this in your browser if nothing horrible has happened.
+      <br />
+      <br />
+      <img src="../../assets/images/9.png" />
+      <br />
+      <br />
+      When you are ready to be done, you can build and push to a server of
+      choice.
+      <br />
+      <br />
+
+      <i>
+        After building, you should see a <strong>dist</strong> folder in your
+        projects root, that will contain our bundled files!</i
+      >
+      <br />
+      <br />
+      <img src="../../assets/images/10.png" />
+      <br />
+      <br />
+      <h2>
+        Lastly, I will show you how to push this project to
+        <ion-label color="secondary"> Heroku</ion-label>.
+      </h2>
+      <br />
+      <br />
+      Step 15.) lets install express and add index.js file to our project root
+      <br />
+      <br />
+
+      <ion-label color="primary">npm i express</ion-label>
+      <br />
+      <br />
+      <ion-label color="primary"> 1> index.js</ion-label>
+
+      <br />
+      <br />
+      Step 16.) Set up basic express server in our index.js in our projects
+      root.
+      <br />
+      <br />
+      <ion-label>
+        <textarea class="codeSnips7">
+            const express = require("express");
+            const path = require("path");
+            const port = process.env.PORT || 8080;
+            const app = express();
+            
+            app.use(express.static(__dirname + "/dist"));
+            
+            app.get("/src/", (req, res) => {
+              res.sendFile(path.resolve(__dirname, "index.html"));
+            });
+            app.listen(port);
+             </textarea
+        >
+      </ion-label>
+      <br />
+      <br />
+      Step 17.) Add these scripts to your package.json
+      <br />
+      <br />
+      "start": "node index.js", "heroku-postbuild": "webpack --config
+      ./bundler/webpack.prod.js"
+      <br />
+      <br />
+
+      Your scripts should now look like this
+      <br />
+      <br />
+      <img src="../../assets/images/11.png" />
+      <br />
+      <br />
+      <strong>
+        ** NOTE: You need to run the build script one more time at this
+        point</strong
+      >
+      <br />
+      <br />
+      Step 18.) login using heroku cli
+      <br />
+      <br />
+      <ion-label color="primary"> heroku login</ion-label>
+      <br />
+      <br />
+      Step 19.) Create a new heroku app using
+      <br />
+      <br />
+      <ion-label color="primary">heroku create</ion-label>
+      <br />
+      <br />
+      Step 20.) initialize a new git repo with
+      <br />
+      <br />
+      <ion-label color="primary"> git init</ion-label>
+      <br />
+      <br />
+      on VS code , at this time you may be asked to add a
+      <ion-label color="danger">.gitignore</ion-label> , go ahead and click yes.
+      <br />
+      <br />
+      Step 21.) retrieve the repo you just created and deploy.
+      <br />
+      <br />
+      <ion-label color="primary"
+        >heroku git:remote --a your-heroku-app-name</ion-label
+      >
+      <br />
+      <br />
+      <ion-label color="primary">git add .</ion-label>
+
+      <br />
+      <br />
+      <ion-label color="primary">
+        git commit -am “first”
+      </ion-label>
+
+      <br />
+      <br />
+      <ion-label color="primary"> git push heroku master</ion-label>
+
+      <br />
+      <br />
+      <strong
+        ><h3>
+          You should now see a link to your hosted site in your terminal.
+        </h3></strong
+      >
+      <br />
+      <br />
+      <br />
+    </h5>
+  </div>
+</ion-content>
