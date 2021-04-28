@@ -1,0 +1,138 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-title color="newtan">JSR | T</ion-title>
+    <ion-button
+      color="newtan"
+      href="https://rocky-basin-28023.herokuapp.com/"
+      slot="end"
+      >Space
+      <ion-icon name="planet-sharp"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="background">
+  <div class="altCont">
+    <div class="homeCont1">
+      <ion-label color="danger">
+        JSR <ion-label color="newtan">| TECHNOLOGIES</ion-label></ion-label
+      >
+      <br />
+      <br />
+      <br />
+
+      <ion-label color="newtan">
+        Full Stack Web Development
+        <br />
+        <br />
+        Augmented and Virtual Reality Solutions
+        <br />
+        <br />
+
+        Creative 3D Solutions
+      </ion-label>
+
+      <ion-label color="light"> </ion-label>
+    </div>
+    <div class="homeCont2">
+      <div class="altRightForm">
+        <ion-label color="newtan"
+          >Want to work with me? Im always looking for new projects or more
+          coding freinds. Lets get in touch!</ion-label
+        >
+        <ion-button fill="outline" color="secondary" routerLink="/contact">
+          Get in Touch
+        </ion-button>
+      </div>
+    </div>
+  </div>
+  <div class="ionSec">
+    <ion-label color="light">
+      <br />
+      <div class="newHomeCont">
+        <ion-item class="homeContainer">
+          <ion-card routerLink="/projects" color="light" id="firstCard">
+            <div id="homeCard">
+              <div id="imgConts1">
+                <div id="images">
+                  <img src="../../assets/images/wave4.gif" />
+                </div>
+                <!--     <div id="otherDv">
+                    <img src="../../assets/images/me.PNG" />
+                  </div> -->
+              </div>
+            </div>
+            <ion-card-header>
+              <ion-card-subtitle>3D Web-Developer</ion-card-subtitle>
+              <ion-card-title>John Rush</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              Hello, My name is John Rush. I am a full stack Web developer from
+              Indianapolis, Indiana. With a passion for 3D, geospatial and
+              connecting/creating RESTful microservices, I love to develop
+              robust web applications!
+            </ion-card-content>
+            <ion-card-content>
+              <strong>Technologies I have used: </strong> Node.js, Webpack,
+              Three.js, Babylon.js, WebGL, WebXR, SASS, Bootstrap, mySQL,
+              phpMyAdmin, Mapbox.com, Google Firebase, Stripe API, Adobe Suite,
+              Blender, Unity, ARFoundation.
+
+              <br />
+              <br />
+              <strong>
+                <i>Minor Proficiency: </i>
+              </strong>
+              JUCE, Vuforia AR Engine
+              <br />
+              <br />
+              <strong>Languages: </strong> Javascript, PHP, Java, C#, Swift,
+              CSS, HTML.
+              <br />
+              <br />
+              <strong>Frameworks: </strong>Ionic, Angular.js, Vue.js,
+              CodeIgniter 3.0
+              <br />
+              <br />
+
+              <strong>
+                <i>Minor Proficiency: </i>
+              </strong>
+              C++
+            </ion-card-content>
+          </ion-card>
+          <div class="card2Cont">
+            <ion-card class="card2">
+              <img src="../../assets/images/principals.png" />
+            </ion-card>
+          </div>
+        </ion-item>
+      </div>
+    </ion-label>
+  </div>
+  <ion-item>
+    <div class="butCont">
+      <ion-button color="newtan" (click)="goProjects()">
+        View My Work <ion-icon name="brush-outline"></ion-icon>
+      </ion-button>
+      <ion-button color="newtan" routerLink="/contact">
+        Contact Me <ion-icon name="megaphone-outline"></ion-icon>
+      </ion-button>
+      <ion-button routerLink="/alt-home" color="newtan"
+        >Home <ion-icon name="home"></ion-icon>
+      </ion-button>
+    </div>
+  </ion-item>
+  <ion-item>
+    <ion-label color="dark">Email: Rushjs@iu.edu</ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-button color="newtan" href="https://github.com/rushjs1">
+      Github <ion-icon name="logo-github"></ion-icon>
+    </ion-button>
+
+    <ion-button slot="end" color="newtan" (click)="goTutorial()">
+      <ion-label color="dark">Other Resources</ion-label>
+    </ion-button>
+  </ion-item>
+</ion-content>

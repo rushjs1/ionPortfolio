@@ -23,6 +23,10 @@ const routes: Routes = [
     path: 'blog',
     loadChildren: () => import('./blog/blog.module').then( m => m.BlogPageModule)
   },
+  {
+    path: 'alt-home',
+    loadChildren: () => import('./alt-home/alt-home.module').then( m => m.AltHomePageModule)
+  },
 ];
 
 @NgModule({
